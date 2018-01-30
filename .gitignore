@@ -1,6 +1,4 @@
-.idea/
 .idea
-*.xml
 .DS_Store
 *.log
 .composer
