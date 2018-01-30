@@ -9,7 +9,7 @@
 namespace Shenjian\Internal;
 
 use Shenjian\Http\RequestCore;
-use Shenjian\Http\RequestCore_Exception;
+use Shenjian\Http\RequestCoreException;
 use Shenjian\Http\ResponseCore;
 use Shenjian\Core\ShenjianException;
 
@@ -50,7 +50,6 @@ class CommonOperation
     public function doRequest($path, $params = null){
         $request_url = self::SHENJIAN_REQUEST_BASE . $path;
         $request = new RequestCore($request_url);
-        $request->set_useragent($this->generateUserAgent());
         $request->set_method('post');
         $params[self::SHENJIAN_USER_KEY] = $this->user_key;
         $params[self::SHENJIAN_TIMESTAMP] = $this->timestamp;
@@ -58,7 +57,7 @@ class CommonOperation
         $request->set_body($params);
         try {
             $request->send_request();
-        } catch (RequestCore_Exception $e) {
+        } catch (RequestCoreException $e) {
             throw(new ShenjianException('RequestCoreException: ' . $e->getMessage()));
         }
         $response_header = $request->get_response_header();
@@ -78,16 +77,7 @@ class CommonOperation
         }
         return $body;
     }
-
-    /**
-     * 生成请求用的UserAgent
-     *
-     * @return string
-     */
-    protected function generateUserAgent(){
-        return self::SHENJIAN_NAME . "/" . self::SHENJIAN_VERSION . " (" . php_uname('s') . "/" . php_uname('r') . "/" . php_uname('m') . ";" . PHP_VERSION . ")";
-    }
-
+    
     /**
      * 根据返回http状态码判断，[200-299]即认为是OK
      *
