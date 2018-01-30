@@ -8,6 +8,7 @@
 
 namespace Shenjian\Internal;
 
+use Shenjian\Model\AppApi;
 
 class ApiOperation extends CommonOperation
 {
