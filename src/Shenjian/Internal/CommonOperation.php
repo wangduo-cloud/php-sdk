@@ -16,7 +16,7 @@ use Shenjian\Core\ShenjianException;
 class CommonOperation
 {
     //Shenjian 内部常量
-    const SHENJIAN_REQUEST_BASE = 'http://192.168.31.11/rest/v3/';
+    const SHENJIAN_REQUEST_BASE = 'http://www.shenjian.io/rest/v3/';
     const SHENJIAN_CONTROLLER = 'controller';
     const SHENJIAN_ACTION = 'action';
     const SHENJIAN_SUB_ACTION = 'sub_action';
@@ -75,7 +75,7 @@ class CommonOperation
             );
             throw new ShenjianException($details);
         }
-        return $body;
+        return json_decode($body, true);
     }
     
     /**
