@@ -27,16 +27,16 @@ class ShenjianClient
     private $api_operation;
 
 
-    public function __construct($accessKeyId, $accessKeySecret){
-        $accessKeyId = trim($accessKeyId);
-        $accessKeySecret = trim($accessKeySecret);
-        if (empty($accessKeyId)) {
+    public function __construct($user_key, $user_secret){
+        $user_key = trim($user_key);
+        $user_secret = trim($user_secret);
+        if (empty($user_key)) {
             throw new ShenjianException("access key id is empty");
         }
-        if (empty($accessKeySecret)) {
+        if (empty($user_secret)) {
             throw new ShenjianException("access key secret is empty");
         }
-        $this->credentials = new Credentials($accessKeyId, $accessKeySecret);
+        $this->credentials = new Credentials($user_key, $user_secret);
         $this->user_operation = new UserOperation($this->credentials);
         $this->app_operation = new AppOperation($this->credentials);
         $this->crawler_operation = new CrawlerOperation($this->credentials);

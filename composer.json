@@ -1,6 +1,5 @@
 {
-    "name": "Shenjian-sdk/Shenjian",
-    "description": "Common interface for logging libraries",
+    "name": "shenjian-sdk/Shenjian",
     "version": "1.0.0",
     "require": {
         "php": ">=5.5"
