@@ -8,6 +8,18 @@ use Shenjian\Core\ShenjianException;
 $shenjian_client = Common::getShenjianClient();
 if (is_null($shenjian_client)) exit(1);
 
+//************************************ 简单使用 ************************************
+
+//获取App列表
+try{
+    $app_list = $shenjian_client->getAppList();
+    var_dump($app_list);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//******************************* 完整用法参考下面函数 *******************************
+
 getAppList($shenjian_client);
 
 /**

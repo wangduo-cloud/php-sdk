@@ -10,6 +10,31 @@ use Shenjian\Model\HostType;
 $shenjian_client = Common::getShenjianClient();
 if (is_null($shenjian_client)) exit(1);
 
+//************************************ 简单使用 ************************************
+
+//获取API列表
+try{
+    $api_list = $shenjian_client->getApiList();
+    var_dump($api_list);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//创建API
+try{
+    $params['app_name'] = "API名称";
+    $params['app_info'] = "API信息";
+    //API应用代码的base64编码
+    $code = @file_get_contents(__DIR__ . "/example/api.js");
+    $params['code'] = base64_encode($code);
+    $api = $shenjian_client->createApi($params);
+    var_dump($api);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//******************************* 完整用法参考下面函数 *******************************
+
 getApiList($shenjian_client);
 $app_id = createApi($shenjian_client);
 if($app_id <= 0) exit(1);
@@ -55,7 +80,8 @@ function createApi($shenjian_client){
         $params['app_name'] = "API名称";
         $params['app_info'] = "API信息";
         //API应用代码的base64编码
-        $params['code'] = "LyoKICDlrp7ml7bojrflj5bov5E144CBMTDjgIEzMOOAgTYw5pel5Liq6IKh5LiK5qac57uf6K6h5pWw5o2u44CC5YyF5ous5LiK5qac5qyh5pWw44CB57Sv56ev6LSt5Lmw6aKd44CB57Sv56ev5Y2W5Ye66aKd44CB5YeA6aKd44CB5Lmw5YWl5bit5L2N5pWw5ZKM5Y2W5Ye65bit5L2N5pWw44CCCiovCnZhciBkYXlzPSI1IjsvL0BpbnB1dChkYXlzLOe7n+iuoeWRqOacnyw144CBMTDjgIEzMOWSjDYw5pel77yM6buY6K6k5Li6NeaXpSkKCnZhciBjb25maWdzID0gewogICAgZG9tYWluczogWyJmaW5hbmNlLnNpbmEuY29tLmNuIl0sCiAgICBzY2FuVXJsczogW10sCiAgICBmaWVsZHM6IFsgLy8gQVBJ5Y+q5oq95Y+Wc2NhbnVybHPkuK3nmoTnvZHpobXvvIzlubbkuJTkuI3kvJrlho3oh6rliqjlj5HnjrDmlrDpk77mjqUKICAgICAgICB7CiAgICAgICAgICAgIG5hbWU6ICJpdGVtcyIsCiAgICAgICAgICAgIHNlbGVjdG9yOiAiLy90YWJsZVtAaWQ9J2RhdGFUYWJsZSddLy90ciIsIAogICAgICAgICAgICByZXBlYXRlZDogdHJ1ZSwKICAgICAgICAgICAgY2hpbGRyZW46IFsKICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgIG5hbWU6ICJjb2RlIiwKICAgICAgICAgICAgICAgICAgYWxpYXM6ICLogqHnpajku6PnoIEiLAogICAgICAgICAgICAgICAgICBzZWxlY3RvcjogIi8vdGRbMV0vYS90ZXh0KCkiLCAKICAgICAgICAgICAgICAgICAgcmVxdWlyZWQ6IHRydWUgCiAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgIG5hbWU6ICJuYW1lIiwKICAgICAgICAgICAgICAgICAgYWxpYXM6ICLogqHnpajlkI3np7AiLAogICAgICAgICAgICAgICAgICBzZWxlY3RvcjogIi8vdGRbMl0vYS90ZXh0KCkiLAogICAgICAgICAgICAgICAgICByZXF1aXJlZDogdHJ1ZSAKICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgbmFtZTogImNvdW50IiwKICAgICAgICAgICAgICAgICAgYWxpYXM6ICLkuIrmppzmrKHmlbAiLAogICAgICAgICAgICAgICAgICBzZWxlY3RvcjogIi8vdGRbM10iIAogICAgICAgICAgICAgIH0sCiAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICBuYW1lOiAiYmFtb3VudCIsCiAgICAgICAgICAgICAgICAgIGFsaWFzOiAi57Sv56ev6LSt5Lmw6aKdKOS4hykiLAogICAgICAgICAgICAgICAgICBzZWxlY3RvcjogIi8vdGRbNF0iIAogICAgICAgICAgICAgIH0sCiAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICBuYW1lOiAic2Ftb3VudCIsCiAgICAgICAgICAgICAgICAgIGFsaWFzOiAi57Sv56ev5Y2W5Ye66aKdKOS4hykiLAogICAgICAgICAgICAgICAgICBzZWxlY3RvcjogIi8vdGRbNV0iIAogICAgICAgICAgICAgIH0sCiAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICBuYW1lOiAibmV0IiwKICAgICAgICAgICAgICAgICAgYWxpYXM6ICLlh4Dpop0o5LiHKSIsCiAgICAgICAgICAgICAgICAgIHNlbGVjdG9yOiAiLy90ZFs2XSIgCiAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgIG5hbWU6ICJiY291bnQiLAogICAgICAgICAgICAgICAgICBhbGlhczogIuS5sOWFpeW4reS9jeaVsCIsCiAgICAgICAgICAgICAgICAgIHNlbGVjdG9yOiAiLy90ZFs3XSIgCiAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgIG5hbWU6ICJzY291bnQiLAogICAgICAgICAgICAgICAgICBhbGlhczogIuWNluWHuuW4reS9jeaVsCIsCiAgICAgICAgICAgICAgICAgIHNlbGVjdG9yOiAiLy90ZFs4XSIgCiAgICAgICAgICAgICAgfQogICAgICAgICAgICBdCiAgICAgICAgfQogICAgXQp9OwoKY29uZmlncy5iZWZvcmVDcmF3bCA9IGZ1bmN0aW9uKHNpdGUpewogICAgaWYoZGF5cyE9PSI1IiAmJiBkYXlzIT09IjEwIiAmJiBkYXlzIT09IjMwIiAmJiBkYXlzIT09IjYwIil7CiAgICAgIHN5c3RlbS5leGl0KCLovpPlhaXnmoTnu5/orqHlkajmnJ/plJnor6/jgIIiKTsgLy8g5YGc5q2i6LCD55So77yM6L+U5Zue6Ieq5a6a5LmJ6ZSZ6K+v5L+h5oGvCiAgICB9CiAgICAvLyDmoLnmja7ovpPlhaXlgLznlJ/miJDopoHop6PmnpDnmoTnvZHpobV1cmzvvIzlubbmt7vliqDliLBzY2FudXJs5LitCiAgICB2YXIgdXJsID0gImh0dHA6Ly92aXAuc3RvY2suZmluYW5jZS5zaW5hLmNvbS5jbi9xL2dvLnBocC92TEhCRGF0YS9raW5kL2dndGovaW5kZXgucGh0bWw/bGFzdD0iK2RheXMrIiZwPTEiOwogICAgc2l0ZS5hZGRTY2FuVXJsKHVybCk7Cn07Cgp2YXIgZmV0Y2hlciA9IG5ldyBGZXRjaGVyKGNvbmZpZ3MpOwpmZXRjaGVyLnN0YXJ0KCk7Cg==";
+        $code = @file_get_contents(__DIR__ . "/example/api.js");
+        $params['code'] = base64_encode($code);
         $api = $shenjian_client->createApi($params);
     }catch (ShenjianException $e){
         Common::println(__FUNCTION__ . ": FAILED");

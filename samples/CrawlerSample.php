@@ -17,6 +17,31 @@ use Shenjian\Model\AppStatus;
 $shenjian_client = Common::getShenjianClient();
 if (is_null($shenjian_client)) exit(1);
 
+//************************************ 简单使用 ************************************
+
+//获取爬虫应用列表
+try{
+    $crawler_list = $shenjian_client->getCrawlerList();
+    var_dump($crawler_list);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//创建爬虫应用
+try{
+    $params['app_name'] = "爬虫应用名称";
+    $params['app_info'] = "爬虫应用信息";
+    //爬虫应用代码的base64编码
+    $code = @file_get_contents(__DIR__ . "/example/crawler.js");
+    $params['code'] = base64_encode($code);
+    $crawler = $shenjian_client->createCrawler($params);
+    var_dump($crawler);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//******************************* 完整用法参考下面函数 *******************************
+
 getCrawlerList($shenjian_client);
 $app_id = createCrawler($shenjian_client);
 if ($app_id <= 0) exit(1);
@@ -50,7 +75,7 @@ while($status != AppStatus::STOPPED){
 //deleteCrawler($shenjian_client, $app_id);
 
 /**
- * 获取Crawler列表
+ * 获取爬虫应用列表
  *
  * @param ShenjianClient $shenjian_client
  */
@@ -78,16 +103,17 @@ function getCrawlerList($shenjian_client){
 }
 
 /**
- * 创建爬虫
+ * 创建爬虫应用
  *
  * @param ShenjianClient $shenjian_client
  */
 function createCrawler($shenjian_client){
     try{
-        $params['app_name'] = "爬虫名称";
-        $params['app_info'] = "爬虫信息";
+        $params['app_name'] = "爬虫应用名称";
+        $params['app_info'] = "爬虫应用信息";
         //爬虫应用代码的base64编码
-        $params['code'] = "LyoKICDniKzlj5bosYzosYbojZrlronljZPmuLjmiI/mjpLooYzniYjvvIhodHRwOi8vd3d3LndhbmRvdWppYS5jb20vdG9wL2dhbWXvvInkuIrnmoTmuLjmiI/kv6Hmga/jgIIKICDlm6DkuLrliJfooajpobXmmK9qc+WKqOaAgeeUn+aIkOeahO+8iOe9kemhtea6kOeggeS4reW5tuayoeacie+8ie+8jOaJgOS7pemcgOimgeWIhuaekOe9kee7nOivt+axgu+8jOaJi+WKqOa3u+WKoOS4i+S4gOmhteWIl+ihqOmhteWSjOWGheWuuemhtemTvuaOpeWIsOW+heeIrOmYn+WIl+S4reOAggoqLwp2YXIgY29uZmlncyA9IHsKICAgIGRvbWFpbnM6IFsid2FuZG91amlhLmNvbSJdLAogICAgc2NhblVybHM6IFsiaHR0cDovL2FwcHMud2FuZG91amlhLmNvbS9hcGkvdjEvYXBwcz90eXBlPXdlZWtseXRvcGdhbWUmbWF4PTEyJnN0YXJ0PTAiXSwKICAgIGNvbnRlbnRVcmxSZWdleGVzOiBbL2h0dHA6XC9cL3d3d1wud2FuZG91amlhXC5jb21cL2FwcHNcLy4qL10sCiAgICBoZWxwZXJVcmxSZWdleGVzOiBbL2h0dHA6XC9cL2FwcHNcLndhbmRvdWppYVwuY29tXC9hcGlcL3YxXC9hcHBzXD90eXBlPXdlZWtseXRvcGdhbWUmbWF4PTEyJnN0YXJ0PVxkKy9dLAogICAgZmllbGRzOiBbCiAgICAgICAgewogICAgICAgICAgICBuYW1lOiAiZ2FtZV9uYW1lIiwKICAgICAgICAgICAgYWxpYXM6ICLmuLjmiI/lkI0iLAogICAgICAgICAgICBzZWxlY3RvcjogIi8vc3Bhbltjb250YWlucyhAY2xhc3MsJ3RpdGxlJyldIiwKICAgICAgICAgICAgcmVxdWlyZWQ6IHRydWUgCiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAgIG5hbWU6ICJnYW1lX2Rvd25sb2FkIiwKICAgICAgICAgICAgYWxpYXM6ICLkuIvovb3ph48iLAogICAgICAgICAgICBzZWxlY3RvcjogIi8vaVtAaXRlbXByb3A9J2ludGVyYWN0aW9uQ291bnQnXSIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgbmFtZToiZ2FtZV9pY29uIiwKICAgICAgICAgICAgYWxpYXM6ICLmuLjmiI/lm77moIciLAogICAgICAgICAgICBzZWxlY3RvcjoiLy9kaXZbY29udGFpbnMoQGNsYXNzLCdhcHAtaWNvbicpXS9pbWdbQGl0ZW1wcm9wPSdpbWFnZSddL0BzcmMiCiAgICAgICAgfQogICAgICAgIAogICAgXQp9OwoKLyoKICDlm57osIPlh73mlbBvblByb2Nlc3NIZWxwZXJVcmzvvJrojrflj5bkuIvkuIDpobXliJfooajpobXku6Xlj4rku47liJfooajpobXkuK3ojrflj5blhoXlrrnpobXpk77mjqXvvIzlubbmiYvliqjmt7vliqDliLDlvoXniKzpmJ/liJfkuK0KKi8KY29uZmlncy5vblByb2Nlc3NIZWxwZXJVcmwgPSBmdW5jdGlvbih1cmwsIGNvbnRlbnQsIHNpdGUpIHsKICAgIC8vIOWIl+ihqOmhtei/lOWbnueahOaVsOaNruaYr2pzb27vvIzpnIDopoHlhYjovazmjaLmiJBqc29u5qC85byPCiAgICB2YXIgamFyciA9IEpTT04ucGFyc2UoY29udGVudCk7CiAgICAvLyDku45qc29u5pWw57uE5Lit6I635Y+W5YaF5a656aG16ZO+5o6l5bm25re75Yqg5Yiw5b6F54is6Zif5YiX5LitCiAgICBmb3IgKHZhciBpID0gMCwgbiA9IGphcnIubGVuZ3RoOyBpIDwgbjsgaSsrKSB7CiAgICAgIHZhciBuZXdfdXJsID0gImh0dHA6Ly93d3cud2FuZG91amlhLmNvbS9hcHBzLyIramFycltpXS5wYWNrYWdlTmFtZTsKICAgICAgc2l0ZS5hZGRVcmwobmV3X3VybCk7CiAgICB9CiAgICAvLyDojrflj5bkuIvkuIDpobXliJfooajpobXpk77mjqXlubbmt7vliqDliLDlvoXniKzpmJ/liJfkuK0KICAgIHZhciBjdXJyZW50U3RhcnQgPSBwYXJzZUludCh1cmwuc3Vic3RyaW5nKHVybC5pbmRleE9mKCImc3RhcnQ9IikgKyA3KSk7CiAgICB2YXIgc3RhcnQgPSBjdXJyZW50U3RhcnQrMTI7CiAgICBpZihzdGFydCA8IDEwMCl7IC8vIOivpWRlbW/lj6rniKzlj5bmuLjmiI/mjpLooYzmppzliY0xMDDnmoTmuLjmiI8KICAgICAgc2l0ZS5hZGRVcmwoImh0dHA6Ly9hcHBzLndhbmRvdWppYS5jb20vYXBpL3YxL2FwcHM/dHlwZT13ZWVrbHl0b3BnYW1lJm1heD0xMiZzdGFydD0iK3N0YXJ0KTsKICAgIH0KICAgIHJldHVybiBmYWxzZTsgLy8g6L+U5ZueZmFsc2XooajnpLrkuI3ku47lvZPliY3liJfooajpobXkuK3oh6rliqjlj5HnjrDmlrDnmoTpk77mjqXvvIzku47ogIzpgb/lhY3mt7vliqDml6DnlKjnmoTpk77mjqXvvIzmj5Dpq5jniKzlj5bpgJ/luqYKfTsKCnZhciBjcmF3bGVyID0gbmV3IENyYXdsZXIoY29uZmlncyk7CmNyYXdsZXIuc3RhcnQoKTsK";
+        $code = @file_get_contents(__DIR__ . "/example/crawler.js");
+        $params['code'] = base64_encode($code);
         $crawler = $shenjian_client->createCrawler($params);
     }catch (ShenjianException $e){
         Common::println(__FUNCTION__ . ": FAILED");
@@ -103,7 +129,7 @@ function createCrawler($shenjian_client){
 }
 
 /**
- * 删除爬虫
+ * 删除爬虫应用
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -120,15 +146,15 @@ function deleteCrawler($shenjian_client, $app_id){
 }
 
 /**
- * 修改爬虫信息
+ * 修改爬虫应用信息
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
  */
 function editCrawler($shenjian_client, $app_id){
     try{
-        $params['app_name'] = "设置的爬虫名称";//不设置则不修改
-        $params['app_info'] = "设置的爬虫信息";//不设置则不修改
+        $params['app_name'] = "设置的爬虫应用名称";//不设置则不修改
+        $params['app_info'] = "设置的爬虫应用信息";//不设置则不修改
         $shenjian_client->editCrawler($app_id, $params);
     }catch (ShenjianException $e){
         Common::println(__FUNCTION__ . ": FAILED");
@@ -139,7 +165,7 @@ function editCrawler($shenjian_client, $app_id){
 }
 
 /**
- * 启动爬虫
+ * 启动爬虫应用
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -158,7 +184,7 @@ function startCrawler($shenjian_client, $app_id){
 }
 
 /**
- * 停止爬虫
+ * 停止爬虫应用
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -177,7 +203,7 @@ function stopCrawler($shenjian_client, $app_id){
 }
 
 /**
- * 暂停爬虫
+ * 暂停爬虫应用
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -196,7 +222,7 @@ function pauseCrawler($shenjian_client, $app_id){
 }
 
 /**
- * 继续爬虫
+ * 继续爬虫应用
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -215,7 +241,7 @@ function resumeCrawler($shenjian_client, $app_id){
 }
 
 /**
- * 获取爬虫状态
+ * 获取爬虫应用状态
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -234,7 +260,7 @@ function getCrawlerStatus($shenjian_client, $app_id){
 }
 
 /**
- * 获取爬虫速率
+ * 获取爬虫应用速率
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -293,7 +319,7 @@ function getCrawlerSource($shenjian_client, $app_id){
 }
 
 /**
- * 清空爬虫数据
+ * 清空爬虫应用数据
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id
@@ -310,7 +336,7 @@ function clearCrawlerSource($shenjian_client, $app_id){
 }
 
 /**
- * 删除爬虫数据
+ * 删除爬虫应用数据
  *
  * @param ShenjianClient $shenjian_client
  * @param $app_id

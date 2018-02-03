@@ -8,6 +8,26 @@ use Shenjian\Core\ShenjianException;
 $shenjian_client = Common::getShenjianClient();
 if (is_null($shenjian_client)) exit(1);
 
+//************************************ 简单使用 ************************************
+
+//获取账号余额
+try{
+    $money = $shenjian_client->getMoney();
+    var_dump($money);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//获取节点信息
+try{
+    $node = $shenjian_client->getNode();
+    var_dump($node);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//******************************* 完整用法参考下面函数 *******************************
+
 getMoney($shenjian_client);
 getNode($shenjian_client);
 
@@ -29,7 +49,7 @@ function getMoney($shenjian_client){
 }
 
 /**
- * 获取node信息
+ * 获取节点信息
  *
  * @param ShenjianClient $shenjian_client
  */

@@ -11,6 +11,30 @@ use Shenjian\Model\AppStatus;
 $shenjian_client = Common::getShenjianClient();
 if (is_null($shenjian_client)) exit(1);
 
+//************************************ 简单使用 ************************************
+
+//获取清洗应用列表
+try{
+    $cleaner_list = $shenjian_client->getCleanerList();
+    var_dump($cleaner_list);
+}catch (ShenjianException $e){
+    var_dump($e->getMessage());
+}
+
+//创建API
+try{
+    $params['app_name'] = "清洗应用名称";
+    $params['app_info'] = "清洗应用信息";
+    //清洗应用代码的base64编码
+    $code = @file_get_contents(__DIR__ . "/example/cleaner.js");
+    $params['code'] = base64_encode($code);
+    $cleaner = $shenjian_client->createCleaner($params);
+}catch (ShenjianException $e){
+    var_dump($e);
+}
+
+//******************************* 完整用法参考下面函数 *******************************
+
 getCleanerList($shenjian_client);
 $app_id = createCleaner($shenjian_client);
 if ($app_id <= 0) exit(1);
@@ -76,7 +100,8 @@ function createCleaner($shenjian_client){
         $params['app_name'] = "清洗应用名称";
         $params['app_info'] = "清洗应用信息";
         //清洗应用代码的base64编码
-        $params['code'] = "LyoqCiog6K+l5riF5rSX5bqU55So5Li76KaB55qE5Yqf6IO95piv5a+56JmO5ZeF572R5paH56ug55qE54is5Y+W57uT5p6c6L+b6KGM5LiA5a6a55qE5aSE55CG77yM5pSv5oyB5Y6f55SfSmF2YVNjcmlwdAoqIOivt+WcqOelnueureaJi+S6keS4iui/kOihjOS7o+egge+8mmh0dHA6Ly9kb2NzLnNoZW5qaWFuLmlvL292ZXJ2aWV3L2d1aWRlL2RldmVsb3AvY2xlYW5lci5odG1sCgoqIOivpeW6lOeUqOS+nei1lkRlbW/kuK3nmoQ8566A5Y2V55qE5paH56ug54is6JmrRGVtby3pm7fplIvnvZHmlofnq6A+CiogMS7or7flhYjlr7zlhaU8566A5Y2V55qE5paH56ug54is6JmrRGVtby3pm7fplIvnvZHmlofnq6A+CiogMi7ngrnlh7vov5DooYzniKzomasKKiAzLuWcqOiuvue9ruS4reWwhuW9k+WJjea4hea0l+W6lOeUqOeahOi+k+WFpeaVsOaNrumAieaLqeS4uuivpeeIrOiZq+eahOeIrOWPluaVsOaNrgoqIDQu5ZCv5Yqo5riF5rSXCioqLwp2YXIgY29uZmlncyA9IHsKICBmaWVsZHM6IFsKICAgIHsKICAgICAgbmFtZTogImFydGljbGVfdGl0bGUiLAogICAgICByZXF1aXJlZDogdHJ1ZSAKICAgIH0sCiAgICB7CiAgICAgIG5hbWU6ICJhcnRpY2xlX2NvbnRlbnQiLAogICAgICByZXF1aXJlZDogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgbmFtZTogImFydGljbGVfcHVibGlzaF90aW1lIiwKICAgICAgcmVxdWlyZWQ6IHRydWUKICAgIH0sCiAgICAvL+WIoOmZpOS6hueIrOiZq+S4reeahOS9nOiAhShhcnRpY2xlX2F1dGhvcinlrZfmrrUKICAgIHsKICAgICAgLy/or6XlrZfmrrXkuLrmlrDlop7lrZfmrrUKICAgICAgbmFtZToiYXJ0aWNsZV9mcm9tIgogICAgfQogIF0KfTsKCmNvbmZpZ3Mub25FYWNoUm93ID0gZnVuY3Rpb24ocm93LCBkYXRhRnJhbWUpIHsKICAvL+WOu+mZpOaJgOacieagh+mimOS4reWQq+acieiLueaenOeahOaWsOmXuwogIGlmIChyb3cuZGF0YS5hcnRpY2xlX3RpdGxlLmluZGV4T2YoIuiLueaenCIpICE9IC0xKSB7CiAgICByZXR1cm4gbnVsbDsKICB9CiAgLy/or7vlj5bniKzomavkuK3nmoTniKzlj5bpk77mjqXlrZfmrrXvvIzlubbotYvlgLznu5nmlrDlop7nmoRhcnRpY2xlX2Zyb20KICByb3cuZGF0YS5hcnRpY2xlX2Zyb20gPSAi5p2l5rqQ77yaIiArIHJvdy5leHRyYURhdGEuX191cmw7CiAgLy/lsIbmraPmlofkuK3nmoTpm7fplIvnvZHpg73mm7/mjaLmiJDnpZ7nrq3miYsKICByb3cuZGF0YS5hcnRpY2xlX2NvbnRlbnQgPSByb3cuZGF0YS5hcnRpY2xlX2NvbnRlbnQucmVwbGFjZSgv6Zu36ZSL572RL2csICLnpZ7nrq3miYsiKTsKICAKICAvL+eUseS6jmZpZWxkc+S4reayoeacieaYvuW8j+eUs+aYju+8jOeIrOiZq+S4reeahOS9nOiAhShhcnRpY2xlX2F1dGhvcinlrZfmrrXoh6rliqjooqvliKDpmaQKICByZXR1cm4gcm93Owp9Cgp2YXIgY2xlYW5lciA9IG5ldyBDbGVhbmVyKGNvbmZpZ3MpOwpjbGVhbmVyLnN0YXJ0KCk7";
+        $code = @file_get_contents(__DIR__ . "/example/cleaner.js");
+        $params['code'] = base64_encode($code);
         $cleaner = $shenjian_client->createCleaner($params);
     }catch (ShenjianException $e){
         Common::println(__FUNCTION__ . ": FAILED");
