@@ -533,7 +533,7 @@ class ShenjianClient
 
 
     /**
-     * 获取API列表
+     * 获取API应用列表
      *
      * @param array $params
      * @return AppApi[] | mixed
@@ -543,7 +543,7 @@ class ShenjianClient
     }
 
     /**
-     * 创建API
+     * 创建API应用
      *
      * @param array $params
      * @return AppApi | mixed
@@ -553,7 +553,7 @@ class ShenjianClient
     }
 
     /**
-     * 删除API
+     * 删除API应用
      *
      * @param int $app_id
      * @return mixed
@@ -563,7 +563,7 @@ class ShenjianClient
     }
 
     /**
-     * 修改API
+     * 修改API应用信息
      *
      * @param int $app_id
      * @param array $params
@@ -574,7 +574,7 @@ class ShenjianClient
     }
 
     /**
-     * 配置代理
+     * 配置API应用的代理
      *
      * @param int $app_id
      * @param array $params
@@ -585,7 +585,7 @@ class ShenjianClient
     }
 
     /**
-     * 配置文件云托管
+     * 配置API应用的文件云托管
      *
      * @param int $app_id
      * @param array $params
@@ -596,7 +596,7 @@ class ShenjianClient
     }
 
     /**
-     * 获取API的调用key
+     * 获取API应用的调用key
      *
      * @param int $app_id
      * @return mixed
