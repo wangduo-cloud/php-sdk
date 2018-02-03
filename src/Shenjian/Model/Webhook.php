@@ -18,26 +18,39 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Model;
 
 
-class Credentials
+class Webhook
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
+    private $url;
+    private $events;
+    
+    /**
+     * @param string $url
+     */
+    public function setUrl($url){
+        $this->url = $url;
+    }
 
     /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
+     * @param array $events
      */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
+    public function setEvents($events){
+        $this->events = $events;
+    }
+
+    /**
+     * @return string | mixed
+     */
+    public function getUrl(){
+        return $this->url;
+    }
+
+    /**
+     * @return WebhookEventType[] | mixed
+     */
+    public function getEvents(){
+        return $this->events;
     }
 }

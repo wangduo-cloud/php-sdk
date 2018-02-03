@@ -18,26 +18,31 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Result;
 
 
-class Credentials
+use Shenjian\Core\ShenjianException;
+use Shenjian\Model\App;
+
+class AppListResult extends Result
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
-
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
+    protected function parseDataFromResponse(){
+        $content = $this->data;
+        if(!(is_array($content) && isset($content['list']) && count($content['list']))){
+            throw new ShenjianException("AppList is empty");
+        }
+        $app_list = array();
+        foreach ($content['list'] as $unit){
+            $app = new App();
+            $app->setAppId($unit['app_id']);
+            $app->setInfo($unit['info']);
+            $app->setName($unit['name']);
+            $app->setType($unit['type']);
+            $app->setStatus($unit['status']);
+            $app->setTimeCreate($unit['time_create']);
+            $app_list[] = $app;
+        }
+        return $app_list;
     }
+
 }

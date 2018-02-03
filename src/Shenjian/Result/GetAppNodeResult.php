@@ -18,26 +18,20 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Result;
 
 
-class Credentials
+use Shenjian\Model\Node;
+
+class GetAppNodeResult extends Result
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
-
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
+    protected function parseDataFromResponse(){
+        $content = $this->data;
+        $node_running = isset($content['node_running']) ? intval($content['node_running']) : 0;
+        $node_left = isset($content['node_left']) ? intval($content['node_left']) : 0;
+        $node = new Node();
+        $node->setNodeRunning($node_running);
+        $node->setNodeLeft($node_left);
+        return $node;
     }
 }

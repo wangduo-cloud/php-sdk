@@ -18,26 +18,24 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Result;
 
 
-class Credentials
+use Shenjian\Model\Node;
+
+class GetUserNodeResult extends Result
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
-
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
+    protected function parseDataFromResponse(){
+        $content = $this->data;
+        $node_all = isset($content['node_all']) ? intval($content['node_all']) : 0;
+        $node_running = isset($content['node_running']) ? intval($content['node_running']) : 0;
+        $node_gpu_all = isset($content['node_gpu_all']) ? intval($content['node_gpu_all']) : 0;
+        $node_gpu_running = isset($content['node_gpu_running']) ? intval($content['node_gpu_running']) : 0;
+        $node = new Node();
+        $node->setNodeAll($node_all);
+        $node->setNodeRunning($node_running);
+        $node->setNodeGpuAll($node_gpu_all);
+        $node->setNodeGpuRunning($node_gpu_running);
+        return $node;
     }
 }

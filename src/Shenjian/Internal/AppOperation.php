@@ -1,19 +1,30 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 2018/1/22
- * Time: 13:56
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 namespace Shenjian\Internal;
 
 
-use Shenjian\Model\App;
+use Shenjian\Result\AppListResult;
 
 class AppOperation extends CommonOperation
 {
-    const CONTROLLER = 'app';
     
     /**
      * 获取应用列表
@@ -23,18 +34,9 @@ class AppOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function getAppList($params = null){
-        $path = self::CONTROLLER . "/list";
-        $result = $this->doRequest($path, $params);
-        if(!is_array($result)){
-            $result = json_decode($result, true);
-        }
-        $result_list = $result['data']['list'];
-        foreach ($result_list as $key => $app){
-            $app_tmp = new App($app['app_id'], $app['info'], $app['name'], $app['type'], $app['status'], $app['time_create']);
-            $result_list[$key] = $app_tmp;
-        }
-        $result['data']['list'] = $result_list;
-        return $result;
+        $path = "app/list";
+        $response = $this->doRequest($path, $params);
+        $result = new AppListResult($response);
+        return $result->getData();
     }
-
 }

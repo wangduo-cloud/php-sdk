@@ -18,26 +18,12 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Model;
 
 
-class Credentials
+class WebhookEventType
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
-
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
-    }
-}
+    const LABEL_NEW = "data.new";
+    const LABEL_CHANGE = "data.updated";
+    const LABEL_CUSTOMIZED = "msg.custom";
+}               

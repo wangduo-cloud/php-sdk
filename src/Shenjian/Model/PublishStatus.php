@@ -18,26 +18,14 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Model;
 
 
-class Credentials
+class PublishStatus
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
+    const RUNNING = "running";
+    const STOPPED = "stopped";
+    const STARTING = "starting";
+    const STOPPING = "stopping";
 
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
-    }
 }

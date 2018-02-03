@@ -18,26 +18,20 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Result;
 
 
-class Credentials
+use Shenjian\Model\AppCleaner;
+
+class AppCleanerResult extends Result
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
-
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
+    protected function parseDataFromResponse(){
+        $content = $this->data;
+        $cleaner = new AppCleaner();
+        $cleaner->setAppId($content['app_id']);
+        $cleaner->setName($content['name']);
+        $cleaner->setStatus($content['status']);
+        $cleaner->setTimeCreate($content['time_create']);
+        return $cleaner;
     }
 }
