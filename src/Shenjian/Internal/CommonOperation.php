@@ -1,9 +1,21 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 2018/1/22
- * Time: 14:40
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 namespace Shenjian\Internal;
@@ -30,6 +42,8 @@ class CommonOperation
     protected $user_key;
     protected $timestamp;
     protected $sign;
+    private $maxRetries = 3;
+    private $redirects = 0;
 
     /**
      * CommonOperation constructor.
@@ -61,71 +75,17 @@ class CommonOperation
             throw(new ShenjianException('RequestCoreException: ' . $e->getMessage()));
         }
         $response_header = $request->get_response_header();
-        $response = new ResponseCore($response_header, $request->get_response_body(), $request->get_response_code());
-        $body = $response->body;
-        if(!$this->isResponseOk($response)){
-            $httpStatus = strval($response->status);
-            $code = $this->retrieveErrorCode($body);
-            $message = $this->retrieveErrorMessage($body);
-            $details = array(
-                'status' => $httpStatus,
-                'code' => $code,
-                'message' => $message,
-                'body' => $body
-            );
-            throw new ShenjianException($details);
+        $data = new ResponseCore($response_header, $request->get_response_body(), $request->get_response_code());
+        if ((integer)$request->get_response_code() === 500) {
+            if ($this->redirects <= $this->maxRetries) {
+                //设置休眠
+                $delay = (integer)(pow(4, $this->redirects) * 100000);
+                usleep($delay);
+                $this->redirects++;
+                $data = $this->doRequest($path, $params);
+            }
         }
-        return json_decode($body, true);
-    }
-    
-    /**
-     * 根据返回http状态码判断，[200-299]即认为是OK
-     *
-     * @param ResponseCore $response
-     * @return bool
-     */
-    protected function isResponseOk($response)
-    {
-        $status = $response->status;
-        if ((int)(intval($status) / 100) == 2) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 尝试从body中获取错误Code
-     *
-     * @param $body
-     * @return string
-     */
-    private function retrieveErrorCode($body)
-    {
-        if (empty($body) || false === strpos($body, '<?xml')) {
-            return '';
-        }
-        $xml = simplexml_load_string($body);
-        if (isset($xml->Code)) {
-            return strval($xml->Code);
-        }
-        return '';
-    }
-
-    /**
-     * 尝试从body中获取错误Message
-     *
-     * @param $body
-     * @return string
-     */
-    private function retrieveErrorMessage($body)
-    {
-        if (empty($body) || false === strpos($body, '<?xml')) {
-            return '';
-        }
-        $xml = simplexml_load_string($body);
-        if (isset($xml->Message)) {
-            return strval($xml->Message);
-        }
-        return '';
+        $this->redirects = 0;
+        return $data;
     }
 }

@@ -1,19 +1,52 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 2018/1/22
- * Time: 11:17
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 namespace Shenjian\Internal;
 
 
-use Shenjian\Model\AppCrawler;
+use Shenjian\Result\AppCrawlerListResult;
+use Shenjian\Result\AppCrawlerResult;
+use Shenjian\Result\AppSourceResult;
+use Shenjian\Result\EditDeleteResult;
+use Shenjian\Result\GetAppNodeResult;
+use Shenjian\Result\GetPublishStatusResult;
+use Shenjian\Result\GetSpeedResult;
+use Shenjian\Result\GetStatusResult;
+use Shenjian\Result\GetWebhookResult;
 
 class CrawlerOperation extends CommonOperation
 {
-    const CONTROLLER = "crawler";
+
+    /**
+     * 获取爬虫应用列表
+     *
+     * @param array $params Key-Value数组
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function getList($params = null){
+        $path = "crawler/list";
+        $response = $this->doRequest($path, $params);
+        $result = new AppCrawlerListResult($response);
+        return $result->getData();
+    }
 
     /**
      * 创建爬虫应用
@@ -23,9 +56,10 @@ class CrawlerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function create($params){
-        $path = self::CONTROLLER . '/create';
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/create";
+        $response = $this->doRequest($path, $params);
+        $result = new AppCrawlerResult($response);
+        return $result->getData();
     }
 
     /**
@@ -37,9 +71,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function delete($app_id){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/delete";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/delete";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
     }
 
     /**
@@ -52,9 +87,26 @@ class CrawlerOperation extends CommonOperation
      */
     public function edit($app_id, $params){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/edit";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/edit";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 设置爬虫应用的自定义项
+     *
+     * @param int $app_id
+     * @param array $params Key-Value数组
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function configCustom($app_id, $params){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/config/custom";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
     }
 
     /**
@@ -67,9 +119,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function start($app_id, $params = null){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/start";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/start";
+        $response = $this->doRequest($path, $params);
+        $result = new GetStatusResult($response);
+        return $result->getData();
     }
 
     /**
@@ -81,9 +134,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function stop($app_id){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/stop";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/stop";
+        $response = $this->doRequest($path, $params);
+        $result = new GetStatusResult($response);
+        return $result->getData();
     }
 
     /**
@@ -95,9 +149,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function pause($app_id){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/pause";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/pause";
+        $response = $this->doRequest($path, $params);
+        $result = new GetStatusResult($response);
+        return $result->getData();
     }
 
     /**
@@ -109,31 +164,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function resume($app_id){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/resume";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-    /**
-     * 获取爬虫应用列表
-     *
-     * @param array $params Key-Value数组
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function getList($params = null){
-        $path = self::CONTROLLER . "/list";
-        $result = $this->doRequest($path, $params);
-        if(!is_array($result)){
-            $result = json_decode($result, true);
-        }
-        $result_list = $result['data']['list'];
-        foreach ($result_list as $key => $app){
-            $app_tmp = new AppCrawler($app['app_id'], $app['info'], $app['name'], $app['type'], $app['status'], $app['time_create']);
-            $result_list[$key] = $app_tmp;
-        }
-        $result['data']['list'] = $result_list;
-        return $result;
+        $path = "crawler/{$app_id}/resume";
+        $response = $this->doRequest($path, $params);
+        $result = new GetStatusResult($response);
+        return $result->getData();
     }
 
     /**
@@ -145,9 +179,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function getStatus($app_id){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/status";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/status";
+        $response = $this->doRequest($path, $params);
+        $result = new GetStatusResult($response);
+        return $result->getData();
     }
 
     /**
@@ -159,23 +194,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function getSpeed($app_id){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/speed";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-    /**
-     * 获取爬虫应用的数据信息
-     *
-     * @param int $app_id
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function getSource($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/source";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/speed";
+        $response = $this->doRequest($path, $params);
+        $result = new GetSpeedResult($response);
+        return $result->getData();
     }
 
     /**
@@ -188,28 +210,56 @@ class CrawlerOperation extends CommonOperation
      */
     public function changeNode($app_id, $params = null){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/node";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/node";
+        $response = $this->doRequest($path, $params);
+        $result = new GetAppNodeResult($response);
+        return $result->getData();
     }
 
-
-    /*----------------------- begin config---------------------------*/
-
+    /**
+     * 获取爬虫应用的数据信息
+     *
+     * @param int $app_id
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function getSource($app_id){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/source";
+        $response = $this->doRequest($path, $params);
+        $result = new AppSourceResult($response);
+        return $result->getData();
+    }
 
     /**
-     * 设置爬虫应用的自定义项
+     * 清空爬虫数据
+     *
+     * @param int $app_id
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function sourceClear($app_id){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/source/clear";
+        $response = $this->doRequest($path);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 删除爬虫数据
      *
      * @param int $app_id
      * @param array $params Key-Value数组
      * @return mixed
      * @throws \Shenjian\Core\ShenjianException
      */
-    public function configCustom($app_id, $params){
+    public function sourceDelete($app_id, $params){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/config/custom";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/source/delete";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
     }
 
     /**
@@ -222,9 +272,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function configProxy($app_id, $params){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/config/proxy";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/config/proxy";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
     }
 
     /**
@@ -237,104 +288,10 @@ class CrawlerOperation extends CommonOperation
      */
     public function configHost($app_id, $params){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/config/host";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-    /**
-     * 设置是否打印所有爬虫应用的日志
-     *
-     * @param int $app_id
-     * @param array $params Key-Value数组
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function configLog($app_id, $params = null){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/config/log";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-
-    /*----------------------- begin autopublish---------------------------*/
-
-
-    /**
-     * 开启爬虫应用的自动发布
-     *
-     * @param int $app_id
-     * @param array $params Key-Value数组
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function startPublish($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/autopublish/start";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-    /**
-     * 停止爬虫应用的自动发布
-     *
-     * @param int $app_id
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function stopPublish($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/autopublish/stop";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-    /**
-     * 获取爬虫应用的自动发布状态
-     *
-     * @param int $app_id
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function getPublishStatus($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/autopublish/status";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-
-    /*----------------------- begin webhook---------------------------*/
-
-
-    /**
-     * 修改爬虫应用的Webhook
-     *
-     * @param int $app_id
-     * @param array $params Key-Value数组
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function setWebhook($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/webhook/set";
-        $result = $this->doRequest($path, $params);
-        return $result;
-    }
-
-    /**
-     * 删除爬虫应用的Webhook
-     *
-     * @param int $app_id
-     * @return mixed
-     * @throws \Shenjian\Core\ShenjianException
-     */
-    public function deleteWebhook($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/webhook/delete";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/config/host";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
     }
 
     /**
@@ -346,8 +303,86 @@ class CrawlerOperation extends CommonOperation
      */
     public function getWebhook($app_id){
         $params[self::SHENJIAN_APP_ID] = $app_id;
-        $path = self::CONTROLLER . "/{$app_id}/webhook/get";
-        $result = $this->doRequest($path, $params);
-        return $result;
+        $path = "crawler/{$app_id}/webhook/get";
+        $response = $this->doRequest($path, $params);
+        $result = new GetWebhookResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 删除爬虫应用的Webhook
+     *
+     * @param int $app_id
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function deleteWebhook($app_id){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/webhook/delete";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 修改爬虫应用的Webhook
+     *
+     * @param int $app_id
+     * @param array $params Key-Value数组
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function setWebhook($app_id, $params){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/webhook/set";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 获取爬虫应用的自动发布状态
+     *
+     * @param int $app_id
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function getPublishStatus($app_id){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/autopublish/status";
+        $response = $this->doRequest($path, $params);
+        $result = new GetPublishStatusResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 开启爬虫应用的自动发布
+     *
+     * @param int $app_id
+     * @param array $params Key-Value数组
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function startPublish($app_id, $params){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/autopublish/start";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 停止爬虫应用的自动发布
+     *
+     * @param int $app_id
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function stopPublish($app_id){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/autopublish/stop";
+        $response = $this->doRequest($path, $params);
+        $result = new EditDeleteResult($response);
+        return $result->getData();
     }
 }

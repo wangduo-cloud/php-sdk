@@ -18,26 +18,14 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Model;
 
 
-class Credentials
+class ProxyType
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
-
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
-    }
+    const NONE = 0;//不使用代理
+    const BASIC = 1;//个人级普通代理IP
+    const BETTER = 2;//个人级优质代理IP
+    const VIP = 3;//企业级专属代理IP
+    const OVERSEA = 4;//海外私密代理IP
 }

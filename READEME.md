@@ -29,10 +29,46 @@
 $user_key = "您的用户Key";
 $user_secret = "您的用户密钥";
 try{
-    $shenjianClient = new ShenjianClient($user_key, $user_secret);
+    $shenjian_client = new ShenjianClient($user_key, $user_secret);
 } catch (ShenjianException $e){
     print $e->getMessage();
 }
 ```
+
+### 启动爬虫
+
+```php
+<?php
+$app_id = "爬虫的AppId";
+$result = $shenjian_client->startCrawler($app_id);
+print $result;
+```
+
+### 获取爬虫状态
+
+```php
+<?php
+$app_id = "爬虫的AppId";
+$result = $shenjian_client->getCrawlerStatus($app_id);
+print $result;
+```
+
+
+### 停止爬虫
+
+```php
+<?php
+$app_id = "爬虫的AppId";
+$result = $shenjian_client->stopCrawler($app_id);
+print $result;
+```
+
+## 作者
+
+- 彭敏敏
+
+## 代码许可
+
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 

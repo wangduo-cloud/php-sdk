@@ -18,26 +18,19 @@
  * under the License.
  */
 
-namespace Shenjian\Internal;
+namespace Shenjian\Result;
 
 
-class Credentials
+use Shenjian\Model\AppSource;
+
+class AppSourceResult extends Result
 {
-    public $user_key;
-    public $user_secret;
-    public $timestamp;
-    public $sign;
-
-    /**
-     * Credentials constructor
-     * @param string $user_key
-     * @param string $user_secret
-     */
-    public function __construct($user_key, $user_secret){
-        $timestamp = time();
-        $sign = strtolower(md5($user_key.$timestamp.$user_secret));
-        $this->user_key  = $user_key;
-        $this->timestamp = $timestamp;
-        $this->sign = $sign;
+    protected function parseDataFromResponse(){
+        $content = $this->data;
+        $source = new AppSource();
+        $source->setAppId($content['app_id']);
+        $source->setType($content['type']);
+        $source->setCount($content['count']);
+        return $source;
     }
 }
