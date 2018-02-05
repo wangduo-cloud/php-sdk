@@ -175,7 +175,7 @@ class ShenjianClient
      * 获取爬虫应用的自定义项
      *
      * @param int $app_id
-     * @return Custom[] | mixed
+     * @return Custom[] | string | mixed
      */
     public function configCrawlerCustomGet($app_id){
         return $this->crawler_operation->configCustomGet($app_id);
