@@ -46,6 +46,7 @@ getCrawlerList($shenjian_client);
 $app_id = createCrawler($shenjian_client);
 if ($app_id <= 0) exit(1);
 editCrawler($shenjian_client, $app_id);
+configCrawlerCustomGet($shenjian_client, $app_id);
 $status = startCrawler($shenjian_client, $app_id);
 while($status != AppStatus::RUNNING){
     sleep(3);
@@ -162,6 +163,32 @@ function editCrawler($shenjian_client, $app_id){
         return;
     }
     Common::println(__FUNCTION__ . ": OK");
+}
+
+/**
+ * 获取爬虫应用的自定义项
+ * 
+ * @param ShenjianClient $shenjian_client
+ * @param $app_id
+ */
+function configCrawlerCustomGet($shenjian_client, $app_id){
+    try{
+        $custom_list = $shenjian_client->configCrawlerCustomGet($app_id);
+    }catch (ShenjianException $e){
+        Common::println(__FUNCTION__ . ": FAILED");
+        Common::println($e->getMessage());
+        return;
+    }
+    Common::println(__FUNCTION__ . ": OK");
+    if(is_array($custom_list) && count($custom_list)){
+        foreach ($custom_list as $key => $custom){
+            Common::println("Custom Key: " . $custom->getKey());
+            Common::println("Custom Name: " . $custom->getName());
+            Common::println("Custom Type: " . $custom->getType());
+            Common::println("Custom Cvalue:" . $custom->getCvalue());
+            echo "\n";
+        }
+    }
 }
 
 /**

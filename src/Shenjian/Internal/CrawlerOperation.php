@@ -24,6 +24,7 @@ namespace Shenjian\Internal;
 use Shenjian\Result\AppCrawlerListResult;
 use Shenjian\Result\AppCrawlerResult;
 use Shenjian\Result\AppSourceResult;
+use Shenjian\Result\CustomResult;
 use Shenjian\Result\EditDeleteResult;
 use Shenjian\Result\GetAppNodeResult;
 use Shenjian\Result\GetPublishStatusResult;
@@ -90,6 +91,21 @@ class CrawlerOperation extends CommonOperation
         $path = "crawler/{$app_id}/edit";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
+        return $result->getData();
+    }
+
+    /**
+     * 获取爬虫应用的自定义项
+     *
+     * @param int $app_id
+     * @return mixed
+     * @throws \Shenjian\Core\ShenjianException
+     */
+    public function configCustomGet($app_id){
+        $params[self::SHENJIAN_APP_ID] = $app_id;
+        $path = "crawler/{$app_id}/config/custom/get";
+        $response = $this->doRequest($path, $params);
+        $result = new CustomResult($response);
         return $result->getData();
     }
 

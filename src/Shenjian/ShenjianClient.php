@@ -32,6 +32,7 @@ use Shenjian\Model\AppApi;
 use Shenjian\Model\AppCleaner;
 use Shenjian\Model\AppCrawler;
 use Shenjian\Model\AppSource;
+use Shenjian\Model\Custom;
 use Shenjian\Model\Node;
 use Shenjian\Model\Webhook;
 
@@ -168,6 +169,16 @@ class ShenjianClient
      */
     public function editCrawler($app_id, $params){
         return $this->crawler_operation->edit($app_id, $params);
+    }
+
+    /**
+     * 获取爬虫应用的自定义项
+     *
+     * @param int $app_id
+     * @return Custom[] | string | mixed
+     */
+    public function configCrawlerCustomGet($app_id){
+        return $this->crawler_operation->configCustomGet($app_id);
     }
 
     /**
