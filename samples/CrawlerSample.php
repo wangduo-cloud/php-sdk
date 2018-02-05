@@ -180,7 +180,7 @@ function configCrawlerCustomGet($shenjian_client, $app_id){
         return;
     }
     Common::println(__FUNCTION__ . ": OK");
-    if($custom_list){
+    if(is_array($custom_list) && count($custom_list)){
         foreach ($custom_list as $key => $custom){
             Common::println("Custom Key: " . $custom->getKey());
             Common::println("Custom Name: " . $custom->getName());
