@@ -180,14 +180,16 @@ function configCrawlerCustomGet($shenjian_client, $app_id){
         return;
     }
     Common::println(__FUNCTION__ . ": OK");
-    if(is_array($custom_list) && count($custom_list)){
-        foreach ($custom_list as $key => $custom){
+    if(is_array($custom_list)){
+        foreach ($custom_list as $custom){
             Common::println("Custom Key: " . $custom->getKey());
             Common::println("Custom Name: " . $custom->getName());
             Common::println("Custom Type: " . $custom->getType());
             Common::println("Custom Cvalue:" . $custom->getCvalue());
             echo "\n";
         }
+    }else{
+        Common::println("Reason: " . $custom_list);
     }
 }
 
@@ -437,8 +439,8 @@ function getCrawlerWebhook($shenjian_client, $app_id){
         return;
     }
     Common::println(__FUNCTION__ . ": OK");
-    Common::println("Cleaner Webhook Url: " . $webhook->getUrl());
-    Common::println("Cleaner Webhook Events: " . json_encode($webhook->getEvents()));
+    Common::println("Crawler Webhook Url: " . $webhook->getUrl());
+    Common::println("Crawler Webhook Events: " . json_encode($webhook->getEvents()));
 }
 
 
@@ -467,7 +469,7 @@ function deleteCrawleWebhook($shenjian_client, $app_id){
  */
 function setCrawlerWebhook($shenjian_client, $app_id){
     try{
-        $params['url'] = "http://www.example.com";//webhook的通知地址，需要是能外网访问的地址
+        $params['url'] = urlencode("http://www.example.com");//webhook的通知地址，需要是能外网访问的地址
         $params['data_new'] = true;//新增数据是否发送webhook，true和非零数字都表示发送，不传表示不发送
         $params['data_updated'] = true;//变动数据是否发送webhook，值同上
         $params['msg_custom'] = true;//自定义消息是否发送webhook，值同上
