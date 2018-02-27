@@ -25,7 +25,8 @@ class Webhook
 {
     private $url;
     private $events;
-    
+    private $gzip;
+
     /**
      * @param string $url
      */
@@ -41,6 +42,13 @@ class Webhook
     }
 
     /**
+     * @param boolean $boolean
+     */
+    public function setGzip($boolean){
+        $this->gzip = $boolean;
+    }
+
+    /**
      * @return string | mixed
      */
     public function getUrl(){
@@ -52,5 +60,9 @@ class Webhook
      */
     public function getEvents(){
         return $this->events;
+    }
+
+    public function getGzip(){
+        return $this->gzip;
     }
 }

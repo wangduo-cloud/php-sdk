@@ -441,6 +441,7 @@ function getCrawlerWebhook($shenjian_client, $app_id){
     Common::println(__FUNCTION__ . ": OK");
     Common::println("Crawler Webhook Url: " . $webhook->getUrl());
     Common::println("Crawler Webhook Events: " . json_encode($webhook->getEvents()));
+    Common::println("Crawler Webhook Events: " . $webhook->getGzip());
 }
 
 
@@ -473,6 +474,7 @@ function setCrawlerWebhook($shenjian_client, $app_id){
         $params['data_new'] = true;//新增数据是否发送webhook，true和非零数字都表示发送，不传表示不发送
         $params['data_updated'] = true;//变动数据是否发送webhook，值同上
         $params['msg_custom'] = true;//自定义消息是否发送webhook，值同上
+        $params['gzip'] = true;//是否将数据压缩后发送，true和非零数字都表示压缩，不传表示不压缩
         $shenjian_client->setCrawlerWebhook($app_id, $params);
     }catch (ShenjianException $e){
         Common::println(__FUNCTION__ . ": FAILED");
