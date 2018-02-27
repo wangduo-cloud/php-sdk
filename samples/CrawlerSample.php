@@ -470,7 +470,7 @@ function deleteCrawleWebhook($shenjian_client, $app_id){
  */
 function setCrawlerWebhook($shenjian_client, $app_id){
     try{
-        $params['url'] = urlencode("http://www.example.com");//webhook的通知地址，需要是能外网访问的地址
+        $params['url'] = "http://www.example.com";//webhook的通知地址，需要是能外网访问的地址
         $params['data_new'] = true;//新增数据是否发送webhook，true和非零数字都表示发送，不传表示不发送
         $params['data_updated'] = true;//变动数据是否发送webhook，值同上
         $params['msg_custom'] = true;//自定义消息是否发送webhook，值同上

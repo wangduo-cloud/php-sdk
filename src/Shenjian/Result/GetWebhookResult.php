@@ -30,7 +30,7 @@ class GetWebhookResult extends Result
         $webhook = new Webhook();
         $webhook->setUrl($content['url']);
         $webhook->setEvents($content['events']);
-        $webhook->setGzip(boolval($content['gzip']));
+        $webhook->setGzip($content['gzip']);
         return $webhook;
     }
 }
