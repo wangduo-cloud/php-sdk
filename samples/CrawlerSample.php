@@ -441,7 +441,7 @@ function getCrawlerWebhook($shenjian_client, $app_id){
     Common::println(__FUNCTION__ . ": OK");
     Common::println("Crawler Webhook Url: " . $webhook->getUrl());
     Common::println("Crawler Webhook Events: " . json_encode($webhook->getEvents()));
-    Common::println("Crawler Webhook Events: " . $webhook->getGzip());
+    Common::println("Crawler Webhook Gzip: " . $webhook->getGzip());
 }
 
 

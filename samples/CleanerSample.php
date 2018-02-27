@@ -305,7 +305,7 @@ function getCleanerWebhook($shenjian_client, $app_id){
     Common::println(__FUNCTION__ . ": OK");
     Common::println("Cleaner Webhook Url: " . $webhook->getUrl());
     Common::println("Cleaner Webhook Events: " . json_encode($webhook->getEvents()));
-    Common::println("Cleaner Webhook Events: " . $webhook->getGzip());
+    Common::println("Cleaner Webhook Gzip: " . $webhook->getGzip());
 }
 
 /**
