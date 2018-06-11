@@ -747,7 +747,7 @@ class RequestCore
                     curl_setopt($curl_handle, CURLOPT_INFILESIZE, $this->read_stream_size);
                     curl_setopt($curl_handle, CURLOPT_UPLOAD, true);
                 } else {
-                    curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $this->request_body);
+                    curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query($this->request_body));
                 }
                 break;
 
@@ -760,7 +760,7 @@ class RequestCore
                     curl_setopt($curl_handle, CURLOPT_INFILESIZE, $this->read_stream_size);
                     curl_setopt($curl_handle, CURLOPT_UPLOAD, true);
                 } else {
-                    curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $this->request_body);
+                    curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query($this->request_body));
                 }
                 break;
 
@@ -775,7 +775,7 @@ class RequestCore
                     curl_setopt($curl_handle, CURLOPT_WRITEFUNCTION, array($this, 'streaming_write_callback'));
                     curl_setopt($curl_handle, CURLOPT_HEADER, false);
                 } else {
-                    curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $this->request_body);
+                    curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query($this->request_body));
                 }
                 break;
         }
