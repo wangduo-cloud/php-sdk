@@ -23,7 +23,7 @@ namespace Shenjian\Result;
 
 use Shenjian\Model\Custom;
 
-class CustomResult extends Result
+class DataResult extends Result
 {
     protected function parseDataFromResponse(){
         if(!$this->data){
