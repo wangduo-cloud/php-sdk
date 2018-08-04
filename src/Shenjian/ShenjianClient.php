@@ -161,6 +161,16 @@ class ShenjianClient
     }
 
     /**
+     * 复制爬虫应用
+     *
+     * @param int $app_id
+     * @return int
+     */
+    public function copyCrawler($app_id){
+        return $this->crawler_operation->copy($app_id);
+    }
+
+    /**
      * 修改爬虫应用信息
      *
      * @param int $app_id
@@ -197,7 +207,7 @@ class ShenjianClient
      *
      * @param int $app_id
      * @param array $params
-     * @return mixed
+     * @return string
      */
     public function startCrawler($app_id, $params = null){
         return $this->crawler_operation->start($app_id, $params);
@@ -207,7 +217,7 @@ class ShenjianClient
      * 停止爬虫应用
      *
      * @param int $app_id
-     * @return mixed
+     * @return string
      */
     public function stopCrawler($app_id){
         return $this->crawler_operation->stop($app_id);
@@ -217,7 +227,7 @@ class ShenjianClient
      * 暂停爬虫应用
      *
      * @param int $app_id
-     * @return mixed
+     * @return string
      */
     public function pauseCrawler($app_id){
         return $this->crawler_operation->pause($app_id);
@@ -227,7 +237,7 @@ class ShenjianClient
      * 继续爬虫应用
      *
      * @param int $app_id
-     * @return mixed
+     * @return string
      */
     public function resumeCrawler($app_id){
         return $this->crawler_operation->resume($app_id);
@@ -237,7 +247,7 @@ class ShenjianClient
      * 获取爬虫应用的状态
      *
      * @param int $app_id
-     * @return mixed
+     * @return string
      */
     public function getCrawlerStatus($app_id){
         return $this->crawler_operation->getStatus($app_id);
@@ -247,7 +257,7 @@ class ShenjianClient
      * 获取爬虫应用的速率
      *
      * @param int $app_id
-     * @return mixed
+     * @return float|int
      */
     public function getCrawlerSpeed($app_id){
         return $this->crawler_operation->getSpeed($app_id);
@@ -304,6 +314,26 @@ class ShenjianClient
      */
     public function configCrawlerProxy($app_id, $params){
         return $this->crawler_operation->configProxy($app_id, $params);
+    }
+
+    /**
+     * 设置爬虫遵守Robots协议
+     *
+     * @param int $app_id
+     * @return void
+     */
+    public function configCrawlerRobotsAgree($app_id) {
+        $this->crawler_operation->configRobotsAgree($app_id);
+    }
+
+    /**
+     * 设置爬虫不遵守Robots协议
+     *
+     * @param int $app_id
+     * @return void
+     */
+    public function configCrawlerRobotsDisagree($app_id) {
+        $this->crawler_operation->configRobotsDisagree($app_id);
     }
 
     /**

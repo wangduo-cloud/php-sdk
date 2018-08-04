@@ -7,3 +7,4 @@ vendor
 /test*.php
 lint/
 protected/commands/nohup.out
+test.php

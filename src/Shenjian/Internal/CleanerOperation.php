@@ -66,9 +66,8 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function delete($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/delete";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new EditDeleteResult($response);
         return $result->getData();
     }
@@ -82,7 +81,6 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function edit($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/edit";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -98,7 +96,6 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function configProxy($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/config/proxy";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -114,7 +111,6 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function configHost($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/config/host";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -130,7 +126,6 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function configSource($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/config/source";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -146,7 +141,6 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function start($app_id, $params = null){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/start";
         $response = $this->doRequest($path, $params);
         $result = new GetStatusResult($response);
@@ -161,9 +155,8 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function stop($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/stop";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new GetStatusResult($response);
         return $result->getData();
     }
@@ -176,9 +169,8 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function pause($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/pause";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new GetStatusResult($response);
         return $result->getData();
     }
@@ -191,9 +183,8 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function resume($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/resume";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new GetStatusResult($response);
         return $result->getData();
     }
@@ -206,9 +197,8 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function getStatus($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/status";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new GetStatusResult($response);
         return $result->getData();
     }
@@ -221,9 +211,8 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function getWebhook($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/webhook/get";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new GetWebhookResult($response);
         return $result->getData();
     }
@@ -237,7 +226,6 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function setWebhook($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/webhook/set";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -252,9 +240,8 @@ class CleanerOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function deleteWebhook($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "cleaner/{$app_id}/webhook/delete";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new EditDeleteResult($response);
         return $result->getData();
     }

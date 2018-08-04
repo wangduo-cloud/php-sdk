@@ -64,9 +64,8 @@ class ApiOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function delete($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "api/{$app_id}/delete";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new EditDeleteResult($response);
         return $result->getData();
     }
@@ -80,7 +79,6 @@ class ApiOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function edit($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "api/{$app_id}/edit";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -96,7 +94,6 @@ class ApiOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function configProxy($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "api/{$app_id}/config/proxy";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -112,7 +109,6 @@ class ApiOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function configHost($app_id, $params){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "api/{$app_id}/config/host";
         $response = $this->doRequest($path, $params);
         $result = new EditDeleteResult($response);
@@ -127,9 +123,8 @@ class ApiOperation extends CommonOperation
      * @throws \Shenjian\Core\ShenjianException
      */
     public function getKey($app_id){
-        $params[self::SHENJIAN_APP_ID] = $app_id;
         $path = "api/{$app_id}/key";
-        $response = $this->doRequest($path, $params);
+        $response = $this->doRequest($path);
         $result = new GetAppApiKeyResult($response);
         return $result->getData();
     }
