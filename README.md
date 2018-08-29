@@ -9,7 +9,7 @@
 1. 在你的`composer.json`中声明对Shenjian SDK for PHP的依赖:
 
         "require": {
-            "Shenjian/shenjian-sdk-php": "~1.2.1"
+            "Shenjian/shenjian-sdk-php": "~1.3"
         }
 
     然后通过`composer install`安装依赖。composer安装完成后，在您的PHP代码中引入依赖即可：

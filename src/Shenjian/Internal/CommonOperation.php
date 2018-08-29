@@ -36,7 +36,7 @@ class CommonOperation
     const SHENJIAN_TIMESTAMP = 'timestamp';
     const SHENJIAN_SIGN = 'sign';
     const SHENJIAN_NAME = 'Shenjian-sdk-php';
-    const SHENJIAN_VERSION = '1.2.1';
+    const SHENJIAN_VERSION = '1.3';
     const SHENJIAN_APP_ID = 'app_id';
 
     protected $user_key;
