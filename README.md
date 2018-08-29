@@ -4,7 +4,7 @@
 - PHP 5.5+
 - cURL extension
 
-##安装方法
+## 安装方法
 
 1. 在你的`composer.json`中声明对Shenjian SDK for PHP的依赖:
 
