@@ -9,7 +9,7 @@
 1. 在你的`composer.json`中声明对Shenjian SDK for PHP的依赖:
 
         "require": {
-            "Shenjian/shenjian-sdk-php": "~1.0"
+            "Shenjian/shenjian-sdk-php": "~1.2.1"
         }
 
     然后通过`composer install`安装依赖。composer安装完成后，在您的PHP代码中引入依赖即可：
@@ -62,10 +62,6 @@ $app_id = "爬虫的AppId";
 $result = $shenjian_client->stopCrawler($app_id);
 print $result;
 ```
-
-## 作者
-
-- 彭敏敏
 
 ## 代码许可
 

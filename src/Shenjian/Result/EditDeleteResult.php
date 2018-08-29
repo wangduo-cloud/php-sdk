@@ -24,7 +24,10 @@ namespace Shenjian\Result;
 class EditDeleteResult extends Result
 {
     protected function parseDataFromResponse(){
-        return null;
+        if(!$this->data){
+            return $this->reason;
+        }
+        return $this->data;
     }
 
 }

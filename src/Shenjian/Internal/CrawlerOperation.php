@@ -24,7 +24,6 @@ namespace Shenjian\Internal;
 use Shenjian\Result\AppCrawlerListResult;
 use Shenjian\Result\AppCrawlerResult;
 use Shenjian\Result\AppSourceResult;
-use Shenjian\Result\CustomResult;
 use Shenjian\Result\EditDeleteResult;
 use Shenjian\Result\GetAppNodeResult;
 use Shenjian\Result\GetPublishStatusResult;
@@ -117,7 +116,7 @@ class CrawlerOperation extends CommonOperation
     public function configCustomGet($app_id){
         $path = "crawler/{$app_id}/config/custom/get";
         $response = $this->doRequest($path);
-        $result = new CustomResult($response);
+        $result = new EditDeleteResult($response);
         return $result->getData();
     }
 
