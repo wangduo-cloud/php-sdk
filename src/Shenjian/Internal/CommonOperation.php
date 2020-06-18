@@ -28,7 +28,7 @@ use Shenjian\Core\ShenjianException;
 class CommonOperation
 {
     //Shenjian 内部常量
-    const SHENJIAN_REQUEST_BASE = 'http://www.shenjian.io/rest/v3/';
+    const SHENJIAN_REQUEST_BASE = 'https://www.wangduoyun.com/rest/v3/';
     const SHENJIAN_CONTROLLER = 'controller';
     const SHENJIAN_ACTION = 'action';
     const SHENJIAN_SUB_ACTION = 'sub_action';
