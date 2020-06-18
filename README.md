@@ -1,4 +1,4 @@
-# Shenjian SDK for PHP
+# wangduo SDK for PHP
 
 ## 运行环境
 - PHP 5.5+
@@ -6,10 +6,10 @@
 
 ## 安装方法
 
-1. 在你的`composer.json`中声明对Shenjian SDK for PHP的依赖:
+1. 在你的`composer.json`中声明对wangduo SDK for PHP的依赖:
 
         "require": {
-            "Shenjian/shenjian-sdk-php": "~1.3"
+            "wangduo/wangduo-sdk-php": "~1.0"
         }
 
     然后通过`composer install`安装依赖。composer安装完成后，在您的PHP代码中引入依赖即可：
@@ -18,7 +18,7 @@
 
 2. 下载SDK源码，在您的代码中引入SDK目录下的`autoload.php`文件：
 
-        require_once '/path/to/shenjian-sdk/autoload.php';
+        require_once '/path/to/wangduo-sdk-php/autoload.php';
 
 ## 快速使用
 
